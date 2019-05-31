@@ -1,30 +1,43 @@
 import csv
+from typing import List
+import numpy as np
+
 from kadai1 import kadai1_dir
 
 
 def read_data(file: csv):
-	data_dic = {
-		'f1': [],
-		'f2': [],
-		'f3': [],
-		'f4': [],
-		'target': []
-	}
-
 	with file.open(mode='r') as f:
 		lines = list(csv.reader(f))[1:]
-		for line in lines:
-			for i, val in enumerate(data_dic.values()):
-				val.append(line[i])
+		features = [line[:4] for line in lines]
+		targets = [line[4] for line in lines]
+		return features, targets
 
-	return data_dic
+
+def batch(items: List, i: int, batch_num: int):
+	if len(items) % batch_num != 0:
+		if len(items) < i * batch_num + batch_num:
+			return [items[i * batch_num:]]
+		else:
+			return [items[i * batch_num: i * batch_num + batch_num]]
+	else:
+		return [items[i * batch_num: i * batch_num + batch_num]]
+
+
+def splits(features: List[float], targets: List[str], batch_num: int):
+	assert len(features) == len(targets)
+	f_batchs = []
+	t_batchs = []
+	for i in range(len(features) // batch_num):
+		f_batchs.append(np.stack(batch(features, i, batch_num)).squeeze())
+		t_batchs.append(np.stack(batch(features, i, batch_num)).squeeze())
+	return f_batchs, t_batchs
 
 
 if __name__ == '__main__':
 	train_data = kadai1_dir / 'train.csv'
 	test_data = kadai1_dir / 'test.csv'
 
-	data_dic = read_data(train_data)
-	print(data_dic)
-	for kew, val in data_dic.items():
-		print(val.__len__())
+	features, targets = read_data(train_data)
+	f_batchs, t_batchs = splits(features, targets, 5)
+	print(f'f_batchs => {f_batchs}')
+	print(f't_batchs => {t_batchs}')
