@@ -1,6 +1,7 @@
 import csv
 from typing import List
 import numpy as np
+import random
 
 from kadai1 import kadai1_dir
 
@@ -8,8 +9,13 @@ from kadai1 import kadai1_dir
 def read_data(file: csv):
 	with file.open(mode='r') as f:
 		lines = list(csv.reader(f))[1:]
+
 		features = [line[:4] for line in lines]
+		random.Random(4).shuffle(features)
+
 		targets = [line[4] for line in lines]
+		random.Random(4).shuffle(targets)
+
 		return features, targets
 
 
@@ -29,7 +35,7 @@ def splits(features: List[float], targets: List[str], batch_num: int):
 	t_batchs = []
 	for i in range(len(features) // batch_num):
 		f_batchs.append(np.stack(batch(features, i, batch_num)).squeeze())
-		t_batchs.append(np.stack(batch(features, i, batch_num)).squeeze())
+		t_batchs.append(np.stack(batch(targets, i, batch_num)).reshape((-1, 1)))
 	return f_batchs, t_batchs
 
 
