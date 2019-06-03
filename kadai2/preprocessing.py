@@ -3,15 +3,15 @@ from typing import List
 import numpy as np
 import random
 
-from kadai2 import kadai2_dir
+from kadai1 import kadai1_dir
 
 
 def read_data(file: csv):
 	with file.open(mode='r') as f:
 		lines = list(csv.reader(f))[1:]
-		features = [line[:2] for line in lines]
+		features = [list(map(float, line[:2])) for line in lines]
 		targets = [line[2] for line in lines]
-		return random.Random(2).sample(features, len(features)), \
+		return random.Random(2).sample(features, len(features)),\
 		       random.Random(2).sample(targets, len(targets))
 
 
@@ -33,25 +33,26 @@ def one_hot_encode(target: np.ndarray):
 	return one_hot_target
 
 
-def splits(features: List[float], targets: List[str], batch_num: int):
+def splits(file: csv, batch_num: int):
+	features, targets = read_data(file)
 	assert len(features) == len(targets)
-	f_batchs = []
-	t_batchs = []
+
+	batches = []
+	target_list = []
 	for i in range(len(features) // batch_num):
 		feat_batch = np.stack(batch(features, i, batch_num)).squeeze()
-		f_batchs.append(feat_batch)
-
 		target_batch = np.stack(batch(targets, i, batch_num)).reshape((-1, 1))
-		t_batchs.append(one_hot_encode(target_batch))
 
-	return f_batchs, t_batchs
+		target_list.append(target_batch)
+		batches.append({'feature': feat_batch,
+		                'target': one_hot_encode(target_batch)})
+
+	return batches, target_list
 
 
 if __name__ == '__main__':
-	train_data = kadai2_dir / 'train.csv'
-	test_data = kadai2_dir / 'test.csv'
+	train_data = kadai1_dir / 'train.csv'
+	test_data = kadai1_dir / 'test.csv'
 
-	features, targets = read_data(train_data)
-	f_batchs, t_batchs = splits(features, targets, 5)
-	print(f'f_batchs => {f_batchs}')
-	print(f't_batchs => {t_batchs}')
+	batches = splits(train_data, 5)
+	print(batches[0])

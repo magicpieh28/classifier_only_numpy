@@ -1,26 +1,35 @@
 import numpy as np
-import random
 
 
-def softmax(z: np.ndarray):
-	return np.exp(z) / np.sum(np.exp(z))
+class SoftmaxRegression(object):
+	def __init__(self, batch_num: int, class_num: int, feature_num: int):
+		self.batch_num = batch_num
+		self.class_num = class_num
+		self.feature_num = feature_num
 
+		self.W_ = np.random.random((self.feature_num, self.class_num))
+		self.b_ = np.array([0.01, 0.1, 0.1])
 
-class Classifier(object):
-	def __init__(self, X: np.ndarray):
-		self.W = np.random.random((X.shape[1]))
-		self.b = np.array(0.)
+	def net(self, X: np.ndarray):
+		return self.softmax(np.dot(X, self.W_) + self.b_)
 
-	def forward(self, X: np.ndarray):
-		z = np.dot(X, self.w) + self.b
-		return softmax(z)
+	@staticmethod
+	def softmax(z: np.ndarray):
+		return (np.exp(z - np.max(z)) / np.sum(np.exp(z - np.max(z)), axis=0)).T
 
-	def backward(self, X: np.ndarray, output: np.ndarray, target: np.ndarray):
-		n = X.shape[0]
-		grad = -np.dot(X, target - output) / n
-		bias = np.mean(target - output)
-		return grad, bias
+	@staticmethod
+	def find_argmax(prob: np.ndarray):
+		return prob.argmax(axis=1)
 
+	@staticmethod
+	def cross_entropy(output: np.ndarray, target: np.ndarray):
+		return - np.sum(target * np.log(output), axis=0)
 
-def cross_entropy(X: np.ndarray, output: np.ndarray, target: np.ndarray):
-	pass
+	def calculate_cost(self, cross_entropy, l2):
+		l2_term = l2 * np.sum(self.W_ ** 2)
+		return 0.5 * np.mean(cross_entropy + l2_term)
+
+	def update(self, grad: np.ndarray, loss: np.ndarray, lr: float, l2: float):
+		self.W_ -= (lr * grad + lr * l2 * self.W_)
+		self.b_ -= (lr * np.sum(loss, axis=0))
+		return self.W_, self.b_
