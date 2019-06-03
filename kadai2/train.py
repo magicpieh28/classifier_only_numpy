@@ -1,5 +1,6 @@
 import numpy as np
 import csv
+import pickle
 
 from kadai2 import kadai2_dir
 from kadai2.preprocessing import splits
@@ -38,6 +39,7 @@ def train(train_file: csv, batch_num: int = 5, epoch_num: int = 10,
 		print('cost: ')
 		print(np.sum(costs) / len(costs))
 
+	pickle.dump(model, open('kadai2.model', mode='wb'))
 	return costs
 
 

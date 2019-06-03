@@ -33,3 +33,8 @@ class SoftmaxRegression(object):
 		self.W_ -= (lr * grad + lr * l2 * self.W_)
 		self.b_ -= (lr * np.sum(loss, axis=0))
 		return self.W_, self.b_
+
+	def predict(self, X: np.ndarray):
+		z = self.net(X)
+		prob = self.softmax(z)
+		return self.find_argmax(prob)

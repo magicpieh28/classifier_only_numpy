@@ -29,7 +29,7 @@ def one_hot_encode(target: np.ndarray):
 	classes = {'A': 0, 'B': 1, 'C': 2}
 	one_hot_target = np.zeros((target.shape[0], len(classes)), dtype=np.float)
 	for i in range(len(target)):
-		one_hot_target[i][classes[target.item(i)]] = 1
+		one_hot_target[i][classes[target.item(i)]] = 1.0
 	return one_hot_target
 
 
