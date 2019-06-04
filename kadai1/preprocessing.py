@@ -6,16 +6,16 @@ import random
 from kadai1 import kadai1_dir
 
 
-def read_data(file: csv):
+def read_data(file: csv):  # データを読み込む。
 	with file.open(mode='r') as f:
-		lines = list(csv.reader(f))[1:]
-		features = [list(map(float, line[:4])) for line in lines]
+		lines = list(csv.reader(f))[1:]  # Headerは特徴量を含んでいない。
+		features = [list(map(float, line[:4])) for line in lines]  # 特徴量が4つであるため。
 		targets = [line[4] for line in lines]
 		return random.Random(4).sample(features, len(features)), \
-		       random.Random(4).sample(targets, len(targets))
+		       random.Random(4).sample(targets, len(targets))  # クラスラベルを混ぜる。
 
 
-def batch(items: List, i: int, batch_num: int):
+def batch(items: List, i: int, batch_num: int):  # バッチ状態にする。
 	if len(items) % batch_num != 0:
 		if len(items) < i * batch_num + batch_num:
 			return [items[i * batch_num:]]
@@ -25,7 +25,7 @@ def batch(items: List, i: int, batch_num: int):
 		return [items[i * batch_num: i * batch_num + batch_num]]
 
 
-def one_hot_encode(target: np.ndarray):
+def one_hot_encode(target: np.ndarray):  # ターゲットラベルがアルファベットであるため、マトリックスに変換。
 	classes = {'A': 0, 'B': 1, 'C': 2}
 	one_hot_target = np.zeros((target.shape[0], len(classes)), dtype=np.float)
 	for i in range(len(target)):
@@ -33,7 +33,7 @@ def one_hot_encode(target: np.ndarray):
 	return one_hot_target
 
 
-def splits(file: csv, batch_num: int):
+def splits(file: csv, batch_num: int):  # データセットをbuildする。
 	features, targets = read_data(file)
 	assert len(features) == len(targets)
 

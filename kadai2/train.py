@@ -9,6 +9,18 @@ from kadai2.classifier import SoftmaxRegression
 
 def train(train_file: csv, batch_num: int = 5, epoch_num: int = 10,
           class_num: int = 3, feature_num: int = 2, lr: float = 0.01, l2: float = 1e-4):
+	"""
+	モデルを訓練するためのメソッド。
+	訓練したモデルはPickleでセーブする。
+	:param train_file: 訓練対象となるファイル。
+	:param batch_num: ミニバッチサイズ。
+	:param epoch_num: 訓練回数。
+	:param class_num: ぶんるしたいクラスの数。（アウトプットサイズ）
+	:param feature_num: 用いられる特徴量の数。
+	:param lr: 学習率。
+	:param l2: か学習を防ぐべく行う正規化のためのパラメタλ。
+	:return: 予測ラベルとターゲットラベルとのさを計算した値。
+	"""
 	print('build datum.')
 	batches, targets = splits(file=train_file, batch_num=batch_num)
 
@@ -23,8 +35,6 @@ def train(train_file: csv, batch_num: int = 5, epoch_num: int = 10,
 			X = batch['feature']
 			z = model.net(X)
 			prob = model.softmax(z)
-			# print(model.find_argmax(prob))
-			# print(targets[i])
 
 			loss = prob - batch['target']
 			grad = np.dot(X.T, loss)
