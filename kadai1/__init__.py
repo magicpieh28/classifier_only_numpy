@@ -3,7 +3,6 @@ import sys
 import socket
 from pathlib import Path
 
-
 REQUIRED_PYTHON_VERSION = (3, 7)
 
 if sys.version_info < REQUIRED_PYTHON_VERSION:
