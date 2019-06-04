@@ -1,6 +1,7 @@
 import numpy as np
 import pickle
 import csv
+from typing import List
 
 from kadai1 import kadai1_dir
 from kadai1.preprocessing import splits
@@ -21,6 +22,35 @@ def label2matrix(predict_label: np.ndarray, batch_num: int, feature_num: int):
 	return matrix
 
 
+def cal_accuracy(output: np.ndarray, target: np.ndarray, acc_list: List):
+	acc = np.mean(np.equal(output, target)).item()
+	if type(acc) == float:
+		acc_list.append(acc)
+	return acc
+
+
+def cal_precision(output: np.ndarray, target: np.ndarray, pre_list: List):
+	pre = (np.sum(target * output == 1) / np.sum(output)).item()
+	if type(pre) == float:
+		pre_list.append(pre)
+	return pre
+
+
+def cal_recall(output: np.ndarray, target: np.ndarray, rec_list: List):
+	rec = (np.sum(target * output == 1) / np.sum(target)).item()
+	if type(rec) == float:
+		rec_list.append(rec)
+	return rec
+
+
+def cal_f1(precision: float, recall: float, f1_list: List):
+	if precision != 0.0 or recall != 0.0:
+		f1 = 2 * precision * recall / (precision + recall)
+		if type(f1) == float:
+			f1_list.append(f1)
+		return f1
+
+
 def eval(test_file: csv, batch_num: int = 5, feature_num: int = 3):
 	model = pickle.load(open('kadai1.model', mode='rb'))
 
@@ -37,16 +67,13 @@ def eval(test_file: csv, batch_num: int = 5, feature_num: int = 3):
 		print(f'predict_str_label => {predict_str_label}')
 		print(f'targets[i] => {targets[i]}')
 
-		predict_label = label2matrix(predict_label, batch_num, feature_num)
-		accuracy = np.mean(np.equal(batch['target'], predict_label))
-		precision = np.sum(batch['target'] * predict_label == 1) / np.sum(predict_label)
-		recall = np.sum(batch['target'] * predict_label == 1) / np.sum(batch['target'])
-		f1 = 2 * precision * recall / (precision + recall)
+		output = label2matrix(predict_label, batch_num, feature_num)
+		target = batch['target']
 
-		acc_score.append(accuracy)
-		pre_score.append(precision)
-		rec_score.append(recall)
-		f1_score.append(f1)
+		cal_accuracy(output=output, target=target, acc_list=acc_score)
+		precision = cal_precision(output=output, target=target, pre_list=pre_score)
+		recall = cal_recall(output=output, target=target, rec_list=rec_score)
+		cal_f1(precision=precision, recall=recall, f1_list=f1_score)
 
 	return sum(acc_score) / len(acc_score), \
 	       sum(pre_score) / len(pre_score), \
