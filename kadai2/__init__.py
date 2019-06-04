@@ -6,7 +6,7 @@ from pathlib import Path
 REQUIRED_PYTHON_VERSION = (3, 7)
 
 if sys.version_info < REQUIRED_PYTHON_VERSION:
-	exit(f'Python 3.7 or higher version is required')
+    exit(f'Python 3.7 or higher version is required')
 
 host_name: str = socket.gethostname()
 system_name: str = platform.system().lower()
