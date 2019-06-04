@@ -82,9 +82,9 @@ def eval(test_file: csv, batch_num: int = 5, feature_num: int = 3):
 
 
 if __name__ == '__main__':
-    test_file = kadai2_dir / 'test.csv'
-    acc, pre, rec, f1 = eval(test_file)
-    print(f'acc => {acc}')
-    print(f'pre => {pre}')
-    print(f'rec => {rec}')
-    print(f'f1 => {f1}')
+	test_file = kadai2_dir / 'test.csv'
+	acc, pre, rec, f1 = eval(test_file)
+	print(f'acc => {acc}')
+	print(f'pre => {pre}')
+	print(f'rec => {rec}')
+	print(f'f1 => {f1}')

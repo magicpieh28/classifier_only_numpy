@@ -11,7 +11,7 @@ def read_data(file: csv):
 		lines = list(csv.reader(f))[1:]
 		features = [list(map(float, line[:2])) for line in lines]
 		targets = [line[2] for line in lines]
-		return random.Random(2).sample(features, len(features)),\
+		return random.Random(2).sample(features, len(features)), \
 		       random.Random(2).sample(targets, len(targets))
 
 
