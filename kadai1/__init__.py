@@ -15,4 +15,4 @@ app_dir = Path(__file__).expanduser().absolute().parent
 project_dir = app_dir.parent
 project_data_dir = project_dir / 'data'
 
-kadai1_dir = project_data_dir / 'retrieva-intern2019' / '1'
+kadai1_dir = project_data_dir / '1'
