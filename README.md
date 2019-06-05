@@ -1,4 +1,6 @@
 # Softmax Regression
+開発・実行環境はJetBrainのPycharmを使用した。
+
 ## ```data```
 ```kadai1```のフォルダのコードは```data```フォルダの```1```フォルダのデータを使う。
 ```kadai2```のフォルダのコードは```data```フォルダの```2```フォルダのデータを使う。
@@ -10,7 +12,6 @@
 - train.py: classifier.pyからfit()のメソッドを呼び出し、train.csvを用いて訓練を行う。費用関数でlossを計算した結果が出力される。
 - eval.py: 訓練ずみのモデルを使ってtest.csvを用いて検証。Accuracy, Precision, Recall, F1指標で計算したモデルの性能結果が出力される。
 
-開発・実行環境はJetBrainのPycharmを使用した。
 train.pyを実行すると```data```フォルダの```1```フォルダの```train.csv```ファイルで訓練を行い、当フォルダに```kadai1.model```でモデルをセーブする。
 ```eval.py```を実行すると```data```フォルダの```2```フォルダの```test.csv```ファイルで検証を行う。
 
