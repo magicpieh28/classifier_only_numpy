@@ -1,5 +1,6 @@
 # Softmax Regression
 開発・実行環境はJetBrainのPycharmを使用した。
+インストールが必要なライブラリー：numpy
 
 ## ```data```
 ```kadai1```のフォルダのコードは```data```フォルダの```1```フォルダのデータを使う。
