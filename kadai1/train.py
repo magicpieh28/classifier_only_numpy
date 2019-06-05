@@ -31,7 +31,7 @@ def train(train_file: csv, batch_num: int = 5, epoch_num: int = 10,
 
     costs = []
     for i in range(epoch_num):
-        for i, batch in enumerate(batches):
+        for batch in batches:
             X = batch['feature']
             z = model.net(X)
             prob = model.softmax(z)
